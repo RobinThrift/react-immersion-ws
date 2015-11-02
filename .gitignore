@@ -1,0 +1,12 @@
+
+# VIM
+*.session
+
+# OS X
+.DS_Store
+
+# Build
+build/
+
+# NPM
+node_modules/

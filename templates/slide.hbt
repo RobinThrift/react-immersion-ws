@@ -1,0 +1,11 @@
+<section
+    class="slide {{#each classes}} {{this}} {{/each}}"
+    {{#if background.img}} data-background="{{background.img}}" {{/if}}
+    {{#if background.transition}} data-background-transition="{{background.transition}}" {{/if}}
+    {{#if background.size}} data-background-size="{{background.size}}" {{/if}}
+    {{#if background.position}} data-background-position="{{background.position}}" {{/if}}
+    {{#if transition}} data-transition="{{transition}}" {{/if}}
+    {{#if notes}} data-notes="{{notes}}" {{/if}}
+>
+    {{{ contents }}}
+</section> 
