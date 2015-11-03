@@ -6,9 +6,9 @@ shortcodes: true
 css:
     - 'http://fonts.googleapis.com/css?family=Droid+Sans:400,700|Source+Code+Pro|Kaushan+Script'
 reveal:
-    controls: true
-    progress: true
-    slideNumber: true
+    controls: false
+    progress: false
+    slideNumber: false
     history: true
     keyboard: true
     overview: true
@@ -24,12 +24,12 @@ reveal:
         img: '#cb5243'
 }
 
-# [var title]
+# [var title /]
 
 <div class="author-info">
-    <h5>[var author]</h5>
+    <h5>[var author /]</h5>
     <h5>Jr. Dev, NewStore</h5>
-    <a href="http://twitter.com/[var twitter]">@[var twitter]</a>
+    <a href="http://twitter.com/[var twitter /]">@[var twitter /]</a>
 </div>
 
 --
@@ -303,7 +303,7 @@ This is the recommended pattern, when possible.
 
 --
 
-### props stuff here
+### @TODO props stuff here
 
 --
 
@@ -544,3 +544,155 @@ class Profile extends React.Component {
 [fragment]
 `addAsFriend()` with Flux
 [/fragment]
+
+--
+
+## @TODO more examples? Maybe a good one?
+
+-- {
+    notes: |
+        - changed in 0.14
+        - cleaner now
+}
+
+## Refs
+
+--
+
+### Old Way
+
+[fragment]
+```javascript
+<input ref="username" type="text" value={this.props.username} />
+// ...
+console.log(this.refs.username)
+// => HTMLElement
+```
+[/fragment]
+
+[fragment]
+```javascript
+<MaterialTextInput ref="textinput" value={this.props.value} />
+// ...
+console.log(this.refs.textinput)
+// => MaterialTextInput
+console.log(ReactDOM.findDOMNode(this.refs.textinput))
+// => HTMLElement
+```
+[/fragment]
+
+-- {
+    notes: |
+        - mounting? unmounting?
+        - glad you asked
+}
+
+### Since 0.14
+
+```javascript
+class RefTest extends React.Component {
+    render() {
+        return (
+            <input
+                ref={(i) => { this.input = i; }}
+                type="text"
+                value={this.props.username} />
+        );
+    }
+}
+```
+
+[fragment]
+Callback is executed immediately after the component is mounted
+[/fragment]
+
+[fragment]
+Still resolves to HTMLElement or React Class
+[/fragment]
+
+[fragment]
+Callback will be called with `null` as argument, when component is unmounted
+[/fragment]
+
+--
+
+## React Lifecycle
+
+--
+
+[imgfrag src=img/lifecycle-1-1.svg /]
+[imgfrag src=img/lifecycle-1-2.svg /]
+[imgfrag src=img/lifecycle-1-3.svg /]
+
+--
+
+The `componentDidMount()` method of child components is invoked before that of parent components
+
+[imgfrag src=img/lifecycle-2-1.svg /]
+[imgfrag src=img/lifecycle-2-2.svg /]
+[imgfrag src=img/lifecycle-2-1.svg /]
+
+--
+
+[half]
+[imgfrag src=img/component-tree.svg /]
+[imgfrag src=img/component-tree-dirty-parent.svg /]
+[/half]
+
+[half]
+![img/lifecycle-3-1.svg](img/lifecycle-3-1.svg)
+[small]all above are not called on initial render[/small]
+[/half]
+
+--
+
+[half]
+[imgfrag src=img/component-tree.svg /]
+[imgfrag src=img/component-tree-dirty-parent.svg /]
+[imgfrag src=img/component-tree-dirty-children.svg /]
+[/half]
+
+[half]
+![img/lifecycle-3-2.svg](img/lifecycle-3-2.svg)
+[/half]
+
+--
+
+[half]
+[imgfrag src=img/component-tree-dirty-child.svg /]
+[imgfrag src=img/component-tree-removed-child.svg /]
+[/half]
+
+[half]
+![img/lifecycle-3-3.svg](img/lifecycle-3-3.svg)
+[/half]
+
+--
+
+![img/lifecycle-3-4.svg](img/lifecycle-3-4.svg)
+
+--
+
+## Testing
+
+-- {
+    background:
+        video: http://media.giphy.com/media/PFwKHjOcIoVUc/giphy.mp4
+        loop: true
+    notes: |
+        - let's start with the easy
+        - web
+}
+
+--
+
+### Testing ReactDOM
+
+[fragment]
+- what am I testing?
+- how deep do I need to go?
+[/fragment]
+
+--
+
+
