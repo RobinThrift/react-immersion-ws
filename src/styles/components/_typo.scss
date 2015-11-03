@@ -27,7 +27,16 @@ body {
     color: $main;
 }
 
+.reveal h2 {
+    text-transform: none;
+}
+
 .reveal h3 {
+    line-height: 1.1em;
+    text-transform: none;
+}
+
+.reveal h5 {
     line-height: 1.1em;
     text-transform: none;
 }
@@ -99,8 +108,9 @@ body {
 
 
 // FIRST SLIDE HEADER COLOR
-.reveal .slides:first-child h1 {
+.reveal .slides .slide:first-child h1 {
     color: $main-contrast;
+    text-transform: uppercase;
 }
 
 // AUTHOR INFO

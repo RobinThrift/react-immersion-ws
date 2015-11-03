@@ -46,4 +46,21 @@
             opacity: 1;
         }
     }
+
+    .image-fragment {
+        display: none;
+        transition: none;
+        margin: 15px auto;
+        max-width: 95%;
+        height: 95%;
+    }
+
+    .image-fragment:last-child {
+        display: block;
+        visibility: none;
+    }
+
+    .current-fragment {
+        display: block;
+    }
 }

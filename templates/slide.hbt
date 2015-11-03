@@ -1,6 +1,8 @@
 <section
     class="slide {{#each classes}} {{this}} {{/each}}"
     {{#if background.img}} data-background="{{background.img}}" {{/if}}
+    {{#if background.video}} data-background-video="{{background.video}}" {{/if}}
+    {{#if background.loop}} data-background-video-loop {{/if}}
     {{#if background.transition}} data-background-transition="{{background.transition}}" {{/if}}
     {{#if background.size}} data-background-size="{{background.size}}" {{/if}}
     {{#if background.position}} data-background-position="{{background.position}}" {{/if}}
