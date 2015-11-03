@@ -26,7 +26,7 @@
     "metalsmith": "^1.7.0",
     "metalsmith-branch": "0.0.4",
     "metalsmith-collections": "^0.4.1",
-    "metalsmith-flexible-shortcodes": "^0.4.1",
+    "metalsmith-flexible-shortcodes": "^1.0.0",
     "metalsmith-ignore": "^0.1.2",
     "metalsmith-markdown": "^0.2.1",
     "metalsmith-replace": "0.0.6",

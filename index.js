@@ -41,13 +41,14 @@ Metalsmith(__dirname)
             'fragment': function(str) {
                 return '<div class="fragment">' + str + '</div>';
             },
+            'imgfrag': function(str, params) {
+                return '<img class="fragment image-fragment" src="' +  params.src + '">';
+            },
             'colour': function(str, params) {
                 return '<span style="color: #' + params.hex + ';">' + str + '</span>';
             },
             'var': function(str, params, data) {
-                for (var name in params) {
-                    return data.config[name];
-                }
+                return data.config[params[0]];
             },
             'white': function(str) {
                 return '<span class="text--white">' + str + '</span>';
