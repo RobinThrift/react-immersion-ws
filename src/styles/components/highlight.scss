@@ -8,7 +8,7 @@ $grue: #009999;
 
 /* Syntax highlighting (src:https://github.com/mojombo/tpw/blob/master/css/syntax.css) */
 .reveal .slide {
-    code { color: #0e0e0e; padding: 5px; }
+    code { color: #0e0e0e; }
     .highlight, .entry-content pre { font-size: 15px; }
     .entry-content pre { padding: 8px 16px; }
     .highlight .c, .hljs-comment { color: $light-grey; font-style: italic } /* Comment */

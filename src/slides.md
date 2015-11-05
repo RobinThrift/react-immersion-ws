@@ -292,7 +292,10 @@ This is the recommended pattern, when possible.
 - event handlers
 - `componentWillReceiveProps`
 
---
+-- {
+    notes: |
+        - and thus component design
+}
 
 ## Props
 [fragment]
@@ -303,7 +306,260 @@ This is the recommended pattern, when possible.
 
 --
 
-### @TODO props stuff here
+### Things to consider
+- the component should be generic
+- and flexible
+
+--
+
+## Bad Example
+
+```javascript
+class ProductInfiniteScroller extends React.Component {
+    scrollHander() {...}
+    dataLoader() {...}
+    reposition() {...}
+    removeClippedSubviews() {...}
+    render() {
+        return (
+            <ul>
+                {this.state.item.map((i) => {
+                    return (<span>{i.name}</span>);
+                })}
+            </ul>
+        );
+    }
+}
+```
+
+-- {
+    notes: |
+        - simple component
+        - that is extremely flexible
+}
+
+## Good Example
+##### React Native's `ScrollView`
+
+```javascript
+<ScrollView
+    horizontal={true|false}
+    bounce={true|false}
+    paging={true|false}>
+</ScrollView>
+```
+
+--
+
+### Input
+[fragment]
+- configure the component
+- give it the **relevant** data
+- prefer simple types
+[/fragment]
+
+[fragment]
+```javascript
+<ProductPrice data={data} />
+<ProductPrice 
+    listPrice={data.price.list}
+    markdownPrice={data.price.markdown} />
+```
+[/fragment]
+
+--
+
+## Output
+[fragment]
+### aka callbacks
+[/fragment]
+
+--
+
+#### Bad Example
+```javascript
+class MyComponent extends React.Component {
+    onClickHandler() {
+        this.props.user.likes += 1;
+    }
+    render() {
+        // ...
+    }
+}
+```
+
+--
+
+#### Good Example
+```javascript
+class MyComponent extends React.Component {
+    onClickHandler() {
+        this.props.onLike(user.props.likes + 1);
+    }
+    render() {
+        // ...
+    }
+}
+```
+
+--
+
+### Immutability
+[fragment]
+- props are immutable
+- in theory, only
+- which makes it a bit unsafe
+[/fragment]
+
+-- {
+    notes: |
+        - they're kind of like immutable structs
+}
+
+### Immtuable.js `Record`
+
+```javascript
+import {Record} from 'immutablejs';
+let FooBar = Record({foo: 'baz', bar: 'blub'});
+// ...
+
+let fb = new FooBar({foo: 'lorem'});
+fb.get('foo') // -> 'lorem'
+
+let changed = fb.set('foo', 'bar');
+fb.get('foo') === changed.get('foo') // -> false
+```
+
+--
+
+### A few more things to consider
+
+--
+
+##### Setting state from props in `constructor` is an anti-pattern
+```javascript
+class MyComponent extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            data: props.data
+        }
+    }
+}
+```
+
+Use the prop directly if you need to!
+
+--
+
+##### Use `componentWillReceiveProps` to update state when props changed
+
+```javascript
+class MyComponent extends React.Component {
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            data: nextProps.data
+        });
+    }
+}
+```
+
+You cannot call `setState` in `componentWillUpdate`!
+
+--
+
+#### Use prop types (and default props)
+
+- there are many
+- use them
+- not only for primitives
+
+```javascript
+MyComponent.propTypes = {
+    someString: React.PropTypes.string,
+    someEnum: React.PropTypes.oneOf(\['A', 'B']),
+    someArrayOf: React.PropTypes.arrayOf(React.PropTypes.number)
+}
+```
+
+--
+
+##### Children are also props (kind of)
+
+- prefer child components over arrays
+- use `cloneElement` when modifying a child component
+```javascript
+<Slider images={\[....]} />
+```
+
+```javascript
+<Slider>
+    <Image />
+    <Image />
+    <Image />
+</Slider>
+```
+
+--
+
+##### Transfer generic props down the tree
+
+Bad:
+```javascript
+class RxButton extends React.Component {
+    render() {
+        return (
+            <TouchableHightlight>
+                {this.props.children}
+            </TouchableHightlight>
+        );
+    }
+}
+
+<RxButton accessibilityLabel="button">
+    // ...
+</RxButton>
+```
+
+--
+
+##### Transfer generic props down the tree
+
+Good:
+```javascript
+class RxButton extends React.Component {
+    render() {
+        return (
+            <TouchableHightlight
+                accessibilityLabel={this.props.accessibilityLabel}>
+                {this.props.children}
+            </TouchableHightlight>
+        );
+    }
+}
+<RxButton accessibilityLabel="button">
+    // ...
+</RxButton>
+```
+
+--
+
+##### Pass along all the props when wrapping a component
+```javascript
+class RxButton extends React.Component {
+    render() {
+        return (
+            <RxButton {...this.props}>
+                <RxIcon src="..." />
+            </RxButton>
+        );
+    }
+}
+<RxIconButton accessibilityLabel="button">
+    // ...
+</RxIconButton>
+```
+
 
 --
 

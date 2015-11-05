@@ -10,3 +10,6 @@ build/
 
 # NPM
 node_modules/
+
+# Gifs
+src/img/gifs/*.gif

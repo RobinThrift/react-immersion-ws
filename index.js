@@ -42,7 +42,28 @@ Metalsmith(__dirname)
                 return '<div class="fragment">' + str + '</div>';
             },
             'imgfrag': function(str, params) {
-                return '<img class="fragment image-fragment" src="' +  params.src + '">';
+                var base = '<img class="fragment image-fragment"';
+                if (params.height) {
+                    base += ' style="height: ' + params.height + '"';
+                }
+                base += ' src="' +  params.src + '"';
+
+                return base + ' />';
+            },
+            'video': function(str, params) {
+                var base = '<video';
+
+                if (params.autoplay) {
+                    base += ' data-autoplay';
+                }
+                if (params.stetch) {
+                    base += ' class="stretch"';
+                }
+                base += ' >';
+
+                base += '<source data-src="' + params.src + '.mp4" type="video/mp4" />'
+
+                return base + '</video>';
             },
             'colour': function(str, params) {
                 return '<span style="color: #' + params.hex + ';">' + str + '</span>';

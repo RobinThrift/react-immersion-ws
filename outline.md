@@ -10,5 +10,7 @@ into the more complex parts of react:
 - lifecycle of react components and the lifecycle methods - x
     - shouldComponentUpdate and performance
 - testing of react components
+    - web - x
+    - native
 - using veer/flux to connect components and services
 - which native components can we use with react-native out-of-the-box?
