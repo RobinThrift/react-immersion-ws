@@ -545,9 +545,6 @@ class Profile extends React.Component {
 `addAsFriend()` with Flux
 [/fragment]
 
---
-
-## @TODO more examples? Maybe a good one?
 
 -- {
     notes: |
@@ -686,13 +683,375 @@ The `componentDidMount()` method of child components is invoked before that of p
 
 --
 
-### Testing ReactDOM
+### Testing React (Web)
 
 [fragment]
-- what am I testing?
-- how deep do I need to go?
+- What am I testing?
+- How deep do I need to go?
+- Do I need the DOM?
+[/fragment]
+
+--
+
+### React Test Utils
+`import ReactTestUtils from 'react-addons-test-utils'`
+
+[Full Docs](http://facebook.github.io/react/docs/test-utils.html)
+
+--
+
+### Assertion Helpers
+- `isElement(element)`
+- `isElementOfType(element, ComponentClass)`
+- `findAllInRenderedTree(tree, testFn)`
+- `scryRenderedComponentsWithType(tree, ComponentClass)`
+- `findRenderedComponentWithType(tree, ComponentClass)`
+- ... and others
+
+[small]Last 3 are still a bit buggy[/small]
+
+--
+
+```javascript
+import {isElementOfType, isElement} from 'react-addons-test-utils';
+
+test('existence', () => {
+    expect(isElement(<MyComponent />)).to.be.true;
+    expect(isElementOfType(<MyComponent />, MyComponent)).to.be.true;
+});
+```
+
+[small][Source](https://github.com/RobinThrift/react-immersion-ws-example-code/tree/EXISTENCE_TEST)[/small]
+
+-- {
+    notes: |
+        - does not care about DOM
+        - as it doesn't actually render
+}
+
+### Shallow Rendering
+
+```javascript
+let shallowRenderer;
+setup(() => {
+    shallowRenderer = createRenderer();
+});
+
+test('ensure correct sub components', () => {
+    shallowRenderer.render(<MyComponent />)
+    let output = shallowRenderer.getRenderOutput();
+    expect(
+        isElementOfType(output.props.children, MySubComponent)
+    ).to.be.true;
+});
+```
+
+[small][Source](https://github.com/RobinThrift/react-immersion-ws-example-code/tree/SHALLOW_RENDER_INTRO)[/small]
+
+--
+
+### DOM Testing
+[fragment]
+#### Problems with traditional DOM testing
+[/fragment]
+[fragment]
+- cumbersome
+- difficult to set up and tear down
+- requires a browser
+- it's slow
+[/fragment]
+
+-- {
+    notes: |
+        - that's why we can use JSDOM
+}
+
+### DOM Testing With JSDOM
+
+[fragment]
+
+```javascript
+var jsdom = require('jsdom');
+var document = jsdom.jsdom('<!doctype html><html><body></body></html>');
+var window = document.defaultView;
+
+global.document = document;
+global.window = window;
+
+for (var key in window) {
+    if (!window.hasOwnProperty(key)) {
+        continue;
+    } else if (key in global) {
+        continue;
+    } else {
+        global\[key] = window\[key]
+    }
+}
+```
+[/fragment]
+
+-- {
+    notes: |
+        - a bit misleading
+        - will probably be renamed soon
+        - use this only when needed
+        - combine with the next thing
+}
+
+`renderIntoDocument(componentInstance)`
+```javascript
+import {Simulate} from 'react-addons-test-utils';
+let node = renderIntoDocument(<MyComponent />);
+```
+[fragment]
+```javascript
+function renderIntoDocument(instance) {
+    var div = document.createElement('div');
+    return ReactDOM.render(instance, div);
+}
+```
+
+Nothing is actually rendered into the document.
+
+This is great for test isolation!
+[/fragment]
+
+--
+
+`findRenderedDOMComponentWithTag(node, tagName)`
+```javascript
+import {findRenderedDOMComponentWithTag} from 'react-addons-test-utils';
+findRenderedDOMComponentWithTag(node, 'button');
+// returns DOM node or throws error
+```
+
+`findRenderedDOMComponentWithTag(node, tagName)`
+```javascript
+import {findRenderedComponentWithType} from 'react-addons-test-utils';
+findRenderedComponentWithType(node, MySubComponent);
+// returns instance node or throws error
+// only works with fully 'rendered' nodes (not shallowly rendered)
+```
+
+--
+
+### Simulate
+```javascript
+import {Simulate} from 'react-addons-test-utils';
+Simulate.click(clickableNode);
+// clickableNode is 'real' DOM node that has a onClick event, 
+// i. e. <button>
+```
+
+[fragment]
+```javascript
+Simulate.change(inputNode);
+Simulate.keyDown(inputNode, {key: 'Enter', keyCode: 13});
+// Simulate.{eventName}(node, eventData);
+// for every event that React supports
+```
+[/fragment]
+
+--
+
+```javascript
+clickHandler() {
+    this.setState({hide: true});
+}
+
+render() {
+    if (this.state.hide) {
+        return (<div></div>);
+    } else {
+        return (
+            <div>
+                <MySubComponent 
+                    name="testing" 
+                    onClick={this.clickHandler.bind(this)} />
+            </div>
+        );
+    }
+}
+```
+
+-- {
+    transition: 'slide-in none'
+}
+
+```javascript
+test('simulate click', () => {
+    let node = renderIntoDocument(<MyComponent />);
+    Simulate.click(findRenderedDOMComponentWithTag(node, 'button'));
+    expect(findRenderedDOMComponentWithTag(node, 'div')).to.be.defined;
+    expect(
+        findRenderedDOMComponentWithTag
+            .bind(undefined, node, 'button')
+    ).to.throw(Error);
+});
+```
+
+[small][Source](https://github.com/RobinThrift/react-immersion-ws-example-code/tree/SIMULATE_JSDOM_INTRO)[/small]
+
+-- {
+    transition: 'none slide-out'
+}
+
+```javascript
+test('simulate click', () => {
+    let node = renderIntoDocument(<MyComponent />);
+    Simulate.click([emphasize]findRenderedDOMComponentWithTag[/emphasize](node, 'button'));
+    expect([emphasize]findRenderedDOMComponentWithTag[/emphasize](node, 'div')).to.be.defined;
+    expect(
+        findRenderedDOMComponentWithTag
+            .bind(undefined, node, 'button')
+    ).to.throw(Error);
+});
+```
+
+[small][Source](https://github.com/RobinThrift/react-immersion-ws-example-code/tree/SIMULATE_JSDOM_INTRO)[/small]
+
+-- {
+    notes: |
+        - this is really, really hard
+}
+
+### Testing React (Native)
+
+-- {
+    background:
+        video: http://media.giphy.com/media/Qz8sdl0fslT5S/giphy.mp4
+        loop: true
+}
+
+--
+
+### Things to note
+- do your unit tests in pure JS
+    - keep the interaction between iOS and JS small as possible
+- keep integration tests to a minimum
+- UI tests are finicky
+
+--
+
+### How do I make my components testable?
+[fragment]
+- use `accessibilityLabel`-prop liberally
+- use `accessible={true}`-prop where appropriate
+[/fragment]
+
+--
+
+What does `accessible={true}` mean?
+
+[imgfrag src=img/accessiblity-1.svg height=500px /]
+[imgfrag src=img/accessiblity-2.svg height=500px /]
+[imgfrag src=img/accessiblity-3.svg height=500px /]
+[imgfrag src=img/accessiblity-4.svg height=500px /]
+[imgfrag src=img/accessiblity-5.svg height=500px /]
+
+--
+
+### UI Testing (using XCode)
+
+[video stretch=true src=img/ui-testing-example-video autoplay=true /]
+
+-- {
+    notes: |
+        - this projects code
+        - consumer app code
+}
+
+## DEMO
+
+```javascript
+<View>
+    <Slider>
+        <Image resizeMode='contain' source={{uri: images\[0]}} />
+        <Image resizeMode='contain' source={{uri: images\[1]}} />
+        <Image resizeMode='contain' source={{uri: images\[2]}} />
+    </Slider>
+</View>
+```
+
+
+```javascript
+<ScrollView
+    accessibilityLabel="slider"
+    horizontal={true}
+    ...>
+    {elements}
+</ScrollView>
+```
+
+--
+
+```swift
+let slider = XCUIApplication().otherElements\["slider"]
+slider.swipeLeft()
+slider.swipeRight()
+slider.swipeLeft()
+slider.swipeLeft()
+XCTAssert(slider.images\["image 3"].frame == slider.frame)
+```
+
+--
+
+### Conclusions
+
+- Swift only
+- A lot of trial and error
+- Hand down accessibility props!
+- Appium will hopefully allow this to be done in JS
+
+--
+
+### Integration Tests (JS with iOS APIs)
+
+Requires 2 parts:
+[fragment]
+1. JS Test Case as React Component
+2. Swift/Obj-C test file
+
+[small]All Exceptions should be thrown in JS[/small]
 [/fragment]
 
 --
 
 
+```javascript
+import {expect} from 'chai';
+import React from 'react-native';
+let {AppRegistry, View, Component} = React;
+import {TestModule} from 'NativeModules';
+
+class TestComp extends Component {
+    render() {
+        TestModule.markTestCompleted();
+        return (<View></View>);
+    }
+}
+
+AppRegistry
+    .registerComponent('ExampleTests', () => { return TestComp });
+```
+
+--
+
+``` objectivec
+@implementation ExampleTests
+{
+  RCTTestRunner *_runner;
+}
+
+- (void)setUp
+{
+  \[super setUp];
+  _runner = RCTInitRunnerForApp(@"intTestDist/tests.int", nil);
+}
+
+- void()testExampleTests
+{
+    \[_runner runTest:_cmd module:@"ExampleTests"]
+}
+@end
+```
