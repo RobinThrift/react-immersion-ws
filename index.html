@@ -1,0 +1,2280 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>React Immersion Workshop</title>
+                <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Sans:400,700|Source+Code+Pro|Kaushan+Script">
+        <link rel="stylesheet" href="styles/main.css">
+    </head>
+    <body>
+
+        <div class="reveal">
+            <div class="slides">
+                <section
+    class="slide "
+     data-background="#cb5243" 
+    
+    
+    
+    
+    
+    
+    
+>
+    <h1 id="-var-title-">React Immersion Workshop</h1>
+<div class="author-info">
+    <h5>Robin Thrift</h5>
+    <h5>Jr. Dev, NewStore</h5>
+    <a href="http://twitter.com/RobinThrift">@RobinThrift</a>
+</div>
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="outline">Outline</h3>
+<ul>
+<li>Basics</li>
+<li>Components</li>
+<li>State</li>
+<li>Props</li>
+<li>Refs</li>
+<li>Context</li>
+<li>Lifecycle Methods</li>
+<li>Testing</li>
+<li>Flux</li>
+<li>React Native APIs</li>
+<li>TypeScript</li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h2 id="basics">Basics</h2>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="-a-javascript-library-for-building-accented-user-interfaces-accented-">“A JavaScript library for building <span class="text--accented">user interfaces</span>”</h3>
+
+</section> 
+
+                <section
+    class="slide  mvc-overview "
+    
+    
+    
+    
+    
+    
+     data-transition="slide-in none-out" 
+    
+>
+    <ul>
+<li><strong>M</strong>odel</li>
+<li><strong>V</strong>iew</li>
+<li><strong>C</strong>ontroller</li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide  mvc-overview  mvc-overview__2 "
+    
+    
+    
+    
+    
+    
+     data-transition="none-in slide-out" 
+    
+>
+    <ul>
+<li><strong>M</strong>odel</li>
+<li><strong>V</strong>iew</li>
+<li><strong>C</strong>ontroller</li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="everything-is-a-component">Everything Is A Component</h3>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="-reduce-emphasize-coupling-emphasize-increase-emphasize-cohesion-emphasize-">“Reduce <span class="text--emphasize">Coupling</span>, increase <span class="text--emphasize">Cohesion</span>”</h3>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="immutability">Immutability</h3>
+<ul>
+<li>no bindings</li>
+<li>no DOM events</li>
+<li>when the Compontents change:<br>rerender entire DOM</li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="virtual-dom">Virtual DOM</h3>
+<p><div class="fragment">
+It’s just like the real DOM
+</div></p>
+<p><div class="fragment">
+But fast!
+</div></p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <ul>
+<li>mimics the real DOM</li>
+</ul>
+<div class="fragment">
+<ul>
+<li>renders only the difference</li>
+</ul>
+<p><code>diff: (Tree, Tree) → ∆Tree</code>
+</div></p>
+<p><div class="fragment">
+Tree Diffing is usually ∈ O(n<sup>3</sup>)!
+</div></p>
+<p><div class="fragment">
+By using heurstics, Reacts Diffing Algorithm ∈ O(n)<br><small class="text--small"><a href="https://facebook.github.io/react/docs/reconciliation.html">More</a></small>
+</div></p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="jsx">JSX</h3>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <pre><code class="lang-js">render() {
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>Hello World, at {new Date().toString()}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>;</span>
+}
+</code></pre>
+<p>⟱ JSX Transformer ⟱</p>
+<pre><code class="lang-js">render() {
+    <span class="hljs-keyword">return</span> React.createElement(<span class="hljs-string">'div'</span>, {}, 
+        <span class="hljs-string">'Hello World, at '</span>, <span class="hljs-keyword">new</span> <span class="hljs-built_in">Date</span>().toString());
+}
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <pre><code class="lang-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">App</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    render() {
+        <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"main"</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"picture-bg"</span>&gt;</span>
+                    <span class="hljs-tag">&lt;<span class="hljs-title">img</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">{getRandomBg()}</span> /&gt;</span>
+                <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">Clock</span> /&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">CmdLine</span> <span class="hljs-attribute">ps1</span>=<span class="hljs-value">"λ"</span> /&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">LinksBox</span> /&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+        )</span>;
+    }
+}
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <pre><code class="lang-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Clock</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    render() {
+        <span class="hljs-keyword">let</span> time = moment().format(<span class="hljs-keyword">this</span>.props.format);
+        <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">time</span>&gt;</span>{time}<span class="hljs-tag">&lt;/<span class="hljs-title">time</span>&gt;</span>)</span>;
+    }
+}
+</code></pre>
+<pre><code class="lang-js"><span class="hljs-comment">// ...</span>
+    render() {
+        <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">Clock</span> <span class="hljs-attribute">format</span>=<span class="hljs-value">"HH:mm"</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
+    }
+<span class="hljs-comment">// ...</span>
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h2 id="let-s-talk-about-components">Let’s Talk About Components</h2>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="everything-is-a-component">Everything Is A Component</h3>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="components-can-be-composed">Components can be composed</h3>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="components-are-meant-to-be-composed">Components are meant to be composed</h3>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- pretend it does not exist
+- moving away from OOP/architecture
+- we don&#x27;t need it
+- enter:
+" 
+>
+    <h3 id="throw-away-extends-emphasize-emphasize-">Throw away <code>extends</code><span class="text--emphasize">*</span></h3>
+<div class="fragment">
+<h5 id="-emphasize-emphasize-almost"><span class="text--emphasize">*</span>almost</h5>
+</div>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="stateless-components">STATELESS COMPONENTS</h3>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- most of your components should be stateless functions
+- in ideal wolrd
+- stateless components can follow a faster code path within the React core
+- recommended
+- why?
+" 
+>
+    <h4 id="stateless-components">Stateless Components</h4>
+<pre><code class="lang-javascript"><span class="hljs-keyword">export</span> <span class="hljs-keyword">let</span> LookMaNoState = (props) =&gt; {
+    <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">span</span>&gt;</span>{props.name}<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>)</span>;
+}
+React.renderDom(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">LookMaNoState</span> <span class="hljs-attribute">name</span>=<span class="hljs-value">"Mark"</span>&gt;</span>, mountNode);</span>
+</code></pre>
+<p><div class="fragment">
+This is the recommended pattern, when possible.
+</div></p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h2 id="-emphasize-mutating-state-emphasize-is-the-root-of-all-emphasize-evil-emphasize-"><span class="text--emphasize">Mutating State</span> is the root of all <span class="text--emphasize">evil</span></h2>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="what-if-i-do-need-state-">What if I do need state?</h3>
+<div class="fragment">
+<h5 id="do-i-really-">Do I really?</h5>
+</div>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="yes-">Yes!</h3>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="fine-">Fine.</h3>
+<div class="fragment">
+<h3 id="let-s-deal-with-state-">Let’s deal with state.</h3>
+</div>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- e. g. loading indicator
+- keyword is internal
+- does not come from outside, usually
+- only leaves via specific api (callbacks)
+" 
+>
+    <h3 id="what-does-belong-in-my-component-s-state-">What does belong in my component’s state?</h3>
+<ul>
+<li><strong>internal</strong> data</li>
+<li>that is changed by internal actions</li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- Props in state is an anti-pattern
+- except for initilisation, like a counter
+- lists might also be an exception, but don&#x27;t have to be
+- for performance
+" 
+>
+    <h3 id="what-does-not-belong-in-my-component-s-state-">What does <strong>not</strong> belong in my component’s state?</h3>
+<ul>
+<li><strong>external</strong> data</li>
+<li>like Props (especially complex types)</li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- how to communicate?
+" 
+>
+    <h3 id="when-do-i-setstate-">When do I <code>setState()</code>?</h3>
+<ul>
+<li>event handlers</li>
+<li><code>componentWillReceiveProps</code></li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- and thus component design
+" 
+>
+    <h2 id="props">Props</h2>
+<div class="fragment">
+<ul>
+<li>define a components API</li>
+<li>input and output</li>
+<li><strong>not</strong> bindings
+</div></li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="things-to-consider">Things to consider</h3>
+<ul>
+<li>the component should be generic</li>
+<li>and flexible</li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h2 id="bad-example">Bad Example</h2>
+<pre><code class="lang-javascript">class ProductInfiniteScroller extends React.Component {
+    scrollHander() {...}
+    dataLoader() {...}
+    reposition() {...}
+    removeClippedSubviews() {...}
+    render() {
+        return (
+            &lt;ul&gt;
+                {this.state.item.map((i) =&gt; {
+                    return (&lt;span&gt;{i.name}&lt;/span&gt;);
+                })}
+            &lt;/ul&gt;
+        );
+    }
+}
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- simple component
+- that is extremely flexible
+" 
+>
+    <h2 id="good-example">Good Example</h2>
+<h5 id="react-native-s-scrollview-">React Native’s <code>ScrollView</code></h5>
+<pre><code class="lang-javascript">&lt;ScrollView
+    horizontal={<span class="hljs-literal">true</span>|<span class="hljs-literal">false</span>}
+    bounce={<span class="hljs-literal">true</span>|<span class="hljs-literal">false</span>}
+    paging={<span class="hljs-literal">true</span>|<span class="hljs-literal">false</span>}&gt;
+<span class="xml"><span class="hljs-tag">&lt;/<span class="hljs-title">ScrollView</span>&gt;</span></span>
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="input">Input</h3>
+<div class="fragment">
+<ul>
+<li>configure the component</li>
+<li>give it the <strong>relevant</strong> data</li>
+<li>prefer simple types
+</div></li>
+</ul>
+<div class="fragment">
+<pre><code class="lang-javascript">&lt;ProductPrice data={data} /&gt;
+<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">ProductPrice</span> 
+    <span class="hljs-attribute">listPrice</span>=<span class="hljs-value">{data.price.list}</span>
+    <span class="hljs-attribute">markdownPrice</span>=<span class="hljs-value">{data.price.markdown}</span> /&gt;</span></span>
+</code></pre>
+</div>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h2 id="output">Output</h2>
+<div class="fragment">
+<h3 id="aka-callbacks">aka callbacks</h3>
+</div>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h4 id="bad-example">Bad Example</h4>
+<pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    onClickHandler() {
+        <span class="hljs-keyword">this</span>.props.user.likes += <span class="hljs-number">1</span>;
+    }
+    render() {
+        <span class="hljs-comment">// ...</span>
+    }
+}
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h4 id="good-example">Good Example</h4>
+<pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    onClickHandler() {
+        <span class="hljs-keyword">this</span>.props.onLike(user.props.likes + <span class="hljs-number">1</span>);
+    }
+    render() {
+        <span class="hljs-comment">// ...</span>
+    }
+}
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="immutability">Immutability</h3>
+<div class="fragment">
+<ul>
+<li>props are immutable</li>
+<li>in theory, only</li>
+<li>which makes it a bit unsafe
+</div></li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- they&#x27;re kind of like immutable structs
+" 
+>
+    <h3 id="immtuable-js-record-">Immtuable.js <code>Record</code></h3>
+<pre><code class="lang-javascript"><span class="hljs-keyword">import</span> {Record} <span class="hljs-keyword">from</span> <span class="hljs-string">'immutablejs'</span>;
+<span class="hljs-keyword">let</span> FooBar = Record({foo: <span class="hljs-string">'baz'</span>, bar: <span class="hljs-string">'blub'</span>});
+<span class="hljs-comment">// ...</span>
+
+<span class="hljs-keyword">let</span> fb = <span class="hljs-keyword">new</span> FooBar({foo: <span class="hljs-string">'lorem'</span>});
+fb.get(<span class="hljs-string">'foo'</span>) <span class="hljs-comment">// -&gt; 'lorem'</span>
+
+<span class="hljs-keyword">let</span> changed = fb.set(<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>);
+fb.get(<span class="hljs-string">'foo'</span>) === changed.get(<span class="hljs-string">'foo'</span>) <span class="hljs-comment">// -&gt; false</span>
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="a-few-more-things-to-consider">A few more things to consider</h3>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h5 id="setting-state-from-props-in-constructor-is-an-anti-pattern">Setting state from props in <code>constructor</code> is an anti-pattern</h5>
+<pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    constructor(props) {
+        <span class="hljs-keyword">super</span>(props);
+        <span class="hljs-keyword">this</span>.state = {
+            data: props.data
+        }
+    }
+}
+</code></pre>
+<p>Use the prop directly if you need to!</p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h5 id="use-componentwillreceiveprops-to-update-state-when-props-changed">Use <code>componentWillReceiveProps</code> to update state when props changed</h5>
+<pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    componentWillReceiveProps(nextProps) {
+        <span class="hljs-keyword">this</span>.setState({
+            data: nextProps.data
+        });
+    }
+}
+</code></pre>
+<p>You cannot call <code>setState</code> in <code>componentWillUpdate</code>!</p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h4 id="use-prop-types-and-default-props-">Use prop types (and default props)</h4>
+<ul>
+<li>there are many</li>
+<li>use them</li>
+<li>not only for primitives</li>
+</ul>
+<pre><code class="lang-javascript">MyComponent.propTypes = {
+    someString: React.PropTypes.string,
+    someEnum: React.PropTypes.oneOf([<span class="hljs-string">'A'</span>, <span class="hljs-string">'B'</span>]),
+    someArrayOf: React.PropTypes.arrayOf(React.PropTypes.number)
+}
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h5 id="children-are-also-props-kind-of-">Children are also props (kind of)</h5>
+<ul>
+<li>prefer child components over arrays</li>
+<li>use <code>cloneElement</code> when modifying a child component<pre><code class="lang-javascript">&lt;Slider images={[....]} /&gt;
+</code></pre>
+</li>
+</ul>
+<pre><code class="lang-javascript">&lt;Slider&gt;
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Image</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> /&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">Slider</span>&gt;</span></span>
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h5 id="transfer-generic-props-down-the-tree">Transfer generic props down the tree</h5>
+<p>Bad:</p>
+<pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RxButton</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    render() {
+        <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">TouchableHightlight</span>&gt;</span>
+                {this.props.children}
+            <span class="hljs-tag">&lt;/<span class="hljs-title">TouchableHightlight</span>&gt;</span>
+        )</span>;
+    }
+}
+
+&lt;RxButton accessibilityLabel=<span class="hljs-string">"button"</span>&gt;
+    <span class="hljs-comment">// ...</span>
+&lt;<span class="hljs-regexp">/RxButton&gt;</span>
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h5 id="transfer-generic-props-down-the-tree">Transfer generic props down the tree</h5>
+<p>Good:</p>
+<pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RxButton</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    render() {
+        <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">TouchableHightlight</span>
+                <span class="hljs-attribute">accessibilityLabel</span>=<span class="hljs-value">{this.props.accessibilityLabel}</span>&gt;</span>
+                {this.props.children}
+            <span class="hljs-tag">&lt;/<span class="hljs-title">TouchableHightlight</span>&gt;</span>
+        )</span>;
+    }
+}
+&lt;RxButton accessibilityLabel=<span class="hljs-string">"button"</span>&gt;
+    <span class="hljs-comment">// ...</span>
+&lt;<span class="hljs-regexp">/RxButton&gt;</span>
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h5 id="pass-along-all-the-props-when-wrapping-a-component">Pass along all the props when wrapping a component</h5>
+<pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RxButton</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    render() {
+        <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">RxButton</span> {<span class="hljs-attribute">...this.props</span>}&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">RxIcon</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"..."</span> /&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">RxButton</span>&gt;</span>
+        )</span>;
+    }
+}
+&lt;RxIconButton accessibilityLabel=<span class="hljs-string">"button"</span>&gt;
+    <span class="hljs-comment">// ...</span>
+&lt;<span class="hljs-regexp">/RxIconButton&gt;</span>
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h2 id="let-s-talk-about-context">Let’s Talk About Context</h2>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- they behave differently depending on where they&#x27;re rendered
+- experimental api
+" 
+>
+    <h3 id="don-t-use-context-emphasize-emphasize-">Don’t use <code>context</code><span class="text--emphasize">*</span></h3>
+<div class="fragment">
+<blockquote>
+<p>“Using context makes your components more coupled and less reusable”</p>
+</blockquote>
+</div>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="what-is-context-">What is <code>context</code>?</h3>
+<div class="fragment">
+<ul>
+<li>describes a components surroundings</li>
+<li>quasi globals (but safer<span class="text--emphasize">*</span>)
+</div></li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="-emphasize-emphasize-use-cases-for-context"><span class="text--emphasize">*</span>Use cases for context</h3>
+<div class="fragment">
+<ul>
+<li>theming</li>
+<li>router(?)
+</div></li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="using-context">Using context</h3>
+<pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyWrapper</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    getChildContext() {
+        <span class="hljs-keyword">return</span> {
+            mainColor: <span class="hljs-string">'#bada55'</span>
+        };
+    }
+}
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="using-context">Using context</h3>
+<pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyButton</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    render() {
+        <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{backgroundColor:</span> <span class="hljs-attribute">this.context.mainColor</span>}}&gt;</span>
+                {this.props.children}
+            <span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+        )</span>;
+    }
+}
+</code></pre>
+<p><div class="fragment">
+This won’t work!
+</div></p>
+<div class="fragment">
+<pre><code class="lang-javascript"><span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>.context);
+<span class="hljs-comment">// =&gt; {}</span>
+</code></pre>
+</div>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- notice the CHILD contextTypes
+" 
+>
+    <h3 id="context-is-safe-ish-">Context is safe(ish)</h3>
+<pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyWrapper</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    getChildContext() {
+        <span class="hljs-keyword">return</span> {
+            mainColor: <span class="hljs-string">'#bada55'</span>
+        };
+    }
+}
+
+MyWrapper.childContextTypes = {
+    mainColor: React.PropTypes.string
+};
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="context-is-safe-ish-">Context is safe(ish)</h3>
+<pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyButton</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    render() {
+        <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{backgroundColor:</span> <span class="hljs-attribute">this.context.color</span>}}&gt;</span>
+                {this.props.children}
+            <span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+        )</span>;
+    }
+}
+
+MyButton.contextTypes = {
+    mainColor: React.PropTypes.string
+};
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- generally, don&#x27;t
+" 
+>
+    <h3 id="-emphasize-emphasize-use-cases-for-context"><span class="text--emphasize">*</span>Use cases for context</h3>
+<div class="fragment">
+<ul>
+<li>theming</li>
+<li>navigator/router (maybe)
+</div></li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="quiz-time-">Quiz Time!</h3>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyWrapper</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    getChildContext() {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.state;
+    }
+    constructor(props) {
+        <span class="hljs-keyword">super</span>(props);
+        UserSerivce.getUserByRoute(<span class="hljs-keyword">this</span>.context.currentRoute)
+            .then((user) =&gt; {
+                <span class="hljs-keyword">this</span>.setState({user});
+            });
+    }
+    render() {
+        <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Profile</span> /&gt;</span>)</span>;
+    }
+}
+</code></pre>
+<small class="text--small">assume <code>contextTypes</code> are set correctly</small>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- assume context types are set
+" 
+>
+    <pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Profile</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    <span class="hljs-comment">// ... addAsFriend()</span>
+    render() {
+        <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"user-profile"</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">h3</span>&gt;</span>{this.context.user.name}<span class="hljs-tag">&lt;/<span class="hljs-title">h3</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">span</span>&gt;</span>
+                    {`Friends: ${this.context.user.friendCount}`}
+                <span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.addAsFriend.bind(this)}</span>&gt;</span>
+                    Add As Friend
+                <span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+        )</span>;
+    }
+}
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Profile</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    addAsFriend() {
+        <span class="hljs-keyword">this</span>.context.user
+                .addUser(<span class="hljs-keyword">this</span>.context.currentUser);
+    }
+    <span class="hljs-comment">// ... render()</span>
+}
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="problems-">Problems?</h3>
+<p><div class="fragment">
+How could this be improved?
+</div></p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyWrapper</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    constructor(props) {
+        <span class="hljs-keyword">super</span>(props);
+    }
+    <span class="hljs-comment">// data retrieval with Flux</span>
+    render() {
+        <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Profile</span> <span class="hljs-attribute">user</span>=<span class="hljs-value">{this.state.user}</span> /&gt;</span>)</span>;
+    }
+}
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- why is this better?
+" 
+>
+    <pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Profile</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    <span class="hljs-comment">// ... addAsFriend()</span>
+    render() {
+        <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">"user-profile"</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">h3</span>&gt;</span>{this.props.user.name}<span class="hljs-tag">&lt;/<span class="hljs-title">h3</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">span</span>&gt;</span>
+                    {`Friends: ${this.props.user.friendCount}`}
+                <span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.addAsFriend.bind(this)}</span>&gt;</span>
+                    Add As Friend
+                <span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+        )</span>;
+    }
+}
+</code></pre>
+<p><div class="fragment">
+<code>addAsFriend()</code> with Flux
+</div></p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- changed in 0.14
+- cleaner now
+" 
+>
+    <h2 id="refs">Refs</h2>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="old-way">Old Way</h3>
+<div class="fragment">
+<pre><code class="lang-javascript">&lt;input ref=<span class="hljs-string">"username"</span> type=<span class="hljs-string">"text"</span> value={<span class="hljs-keyword">this</span>.props.username} /&gt;
+<span class="hljs-comment">// ...</span>
+<span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>.refs.username)
+<span class="hljs-comment">// =&gt; HTMLElement</span>
+</code></pre>
+</div>
+<div class="fragment">
+<pre><code class="lang-javascript">&lt;MaterialTextInput ref=<span class="hljs-string">"textinput"</span> value={<span class="hljs-keyword">this</span>.props.value} /&gt;
+<span class="hljs-comment">// ...</span>
+<span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>.refs.textinput)
+<span class="hljs-comment">// =&gt; MaterialTextInput</span>
+<span class="hljs-built_in">console</span>.log(ReactDOM.findDOMNode(<span class="hljs-keyword">this</span>.refs.textinput))
+<span class="hljs-comment">// =&gt; HTMLElement</span>
+</code></pre>
+</div>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- mounting? unmounting?
+- glad you asked
+" 
+>
+    <h3 id="since-0-14">Since 0.14</h3>
+<pre><code class="lang-javascript"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">RefTest</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    render() {
+        <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">input</span>
+                <span class="hljs-attribute">ref</span>=<span class="hljs-value">{(i)</span> =&gt;</span> { this.input = i; }}
+                type="text"
+                value={this.props.username} /&gt;
+        )</span>;
+    }
+}
+</code></pre>
+<p><div class="fragment">
+Callback is executed immediately after the component is mounted
+</div></p>
+<p><div class="fragment">
+Still resolves to HTMLElement or React Class
+</div></p>
+<p><div class="fragment">
+Callback will be called with <code>null</code> as argument, when component is unmounted
+</div></p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h2 id="react-lifecycle">React Lifecycle</h2>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <p><img class="fragment image-fragment" src="img/lifecycle-1-1.svg" />
+<img class="fragment image-fragment" src="img/lifecycle-1-2.svg" />
+<img class="fragment image-fragment" src="img/lifecycle-1-3.svg" /></p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <p>The <code>componentDidMount()</code> method of child components is invoked before that of parent components</p>
+<p><img class="fragment image-fragment" src="img/lifecycle-2-1.svg" />
+<img class="fragment image-fragment" src="img/lifecycle-2-2.svg" />
+<img class="fragment image-fragment" src="img/lifecycle-2-1.svg" /></p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <p><div class="half">
+<img class="fragment image-fragment" src="img/component-tree.svg" />
+<img class="fragment image-fragment" src="img/component-tree-dirty-parent.svg" />
+</div></p>
+<p><div class="half">
+<img src="img/lifecycle-3-1.svg" alt="img/lifecycle-3-1.svg">
+<small class="text--small">all above are not called on initial render</small>
+</div></p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <p><div class="half">
+<img class="fragment image-fragment" src="img/component-tree.svg" />
+<img class="fragment image-fragment" src="img/component-tree-dirty-parent.svg" />
+<img class="fragment image-fragment" src="img/component-tree-dirty-children.svg" />
+</div></p>
+<p><div class="half">
+<img src="img/lifecycle-3-2.svg" alt="img/lifecycle-3-2.svg">
+</div></p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <p><div class="half">
+<img class="fragment image-fragment" src="img/component-tree-dirty-child.svg" />
+<img class="fragment image-fragment" src="img/component-tree-removed-child.svg" />
+</div></p>
+<p><div class="half">
+<img src="img/lifecycle-3-3.svg" alt="img/lifecycle-3-3.svg">
+</div></p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <p><img src="img/lifecycle-3-4.svg" alt="img/lifecycle-3-4.svg"></p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h2 id="testing">Testing</h2>
+
+</section> 
+
+                <section
+    class="slide "
+    
+     data-background-video="http://media.giphy.com/media/PFwKHjOcIoVUc/giphy.mp4" 
+     data-background-video-loop 
+    
+    
+    
+    
+     data-notes="- let&#x27;s start with the easy
+- web
+" 
+>
+    
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="testing-react-web-">Testing React (Web)</h3>
+<div class="fragment">
+<ul>
+<li>What am I testing?</li>
+<li>How deep do I need to go?</li>
+<li>Do I need the DOM?
+</div></li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="react-test-utils">React Test Utils</h3>
+<p><code>import ReactTestUtils from &#39;react-addons-test-utils&#39;</code></p>
+<p><a href="http://facebook.github.io/react/docs/test-utils.html">Full Docs</a></p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="assertion-helpers">Assertion Helpers</h3>
+<ul>
+<li><code>isElement(element)</code></li>
+<li><code>isElementOfType(element, ComponentClass)</code></li>
+<li><code>findAllInRenderedTree(tree, testFn)</code></li>
+<li><code>scryRenderedComponentsWithType(tree, ComponentClass)</code></li>
+<li><code>findRenderedComponentWithType(tree, ComponentClass)</code></li>
+<li>… and others</li>
+</ul>
+<small class="text--small">Last 3 are still a bit buggy</small>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <pre><code class="lang-javascript"><span class="hljs-keyword">import</span> {isElementOfType, isElement} <span class="hljs-keyword">from</span> <span class="hljs-string">'react-addons-test-utils'</span>;
+
+test(<span class="hljs-string">'existence'</span>, () =&gt; {
+    expect(isElement(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">MyComponent</span> /&gt;</span>)</span>).to.be.true;
+    expect(isElementOfType(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">MyComponent</span> /&gt;</span>, MyComponent)).to.be.true;
+});</span>
+</code></pre>
+<small class="text--small"><a href="https://github.com/RobinThrift/react-immersion-ws-example-code/tree/EXISTENCE_TEST">Source</a></small>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- does not care about DOM
+- as it doesn&#x27;t actually render
+" 
+>
+    <h3 id="shallow-rendering">Shallow Rendering</h3>
+<pre><code class="lang-javascript"><span class="hljs-keyword">let</span> shallowRenderer;
+setup(() =&gt; {
+    shallowRenderer = createRenderer();
+});
+
+test(<span class="hljs-string">'ensure correct sub components'</span>, () =&gt; {
+    shallowRenderer.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">MyComponent</span> /&gt;</span>)</span>
+    <span class="hljs-keyword">let</span> output = shallowRenderer.getRenderOutput();
+    expect(
+        isElementOfType(output.props.children, MySubComponent)
+    ).to.be.true;
+});
+</code></pre>
+<small class="text--small"><a href="https://github.com/RobinThrift/react-immersion-ws-example-code/tree/SHALLOW_RENDER_INTRO">Source</a></small>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="dom-testing">DOM Testing</h3>
+<div class="fragment">
+<h4 id="problems-with-traditional-dom-testing">Problems with traditional DOM testing</h4>
+<p></div>
+<div class="fragment"></p>
+<ul>
+<li>cumbersome</li>
+<li>difficult to set up and tear down</li>
+<li>requires a browser</li>
+<li>it’s slow
+</div></li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- that&#x27;s why we can use JSDOM
+" 
+>
+    <h3 id="dom-testing-with-jsdom">DOM Testing With JSDOM</h3>
+<div class="fragment">
+<pre><code class="lang-javascript"><span class="hljs-keyword">var</span> jsdom = <span class="hljs-built_in">require</span>(<span class="hljs-string">'jsdom'</span>);
+<span class="hljs-keyword">var</span> <span class="hljs-built_in">document</span> = jsdom.jsdom(<span class="hljs-string">'&lt;!doctype html&gt;&lt;html&gt;&lt;body&gt;&lt;/body&gt;&lt;/html&gt;'</span>);
+<span class="hljs-keyword">var</span> <span class="hljs-built_in">window</span> = <span class="hljs-built_in">document</span>.defaultView;
+
+global.document = <span class="hljs-built_in">document</span>;
+global.window = <span class="hljs-built_in">window</span>;
+
+<span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> <span class="hljs-built_in">window</span>) {
+    <span class="hljs-keyword">if</span> (!<span class="hljs-built_in">window</span>.hasOwnProperty(key)) {
+        <span class="hljs-keyword">continue</span>;
+    } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (key <span class="hljs-keyword">in</span> global) {
+        <span class="hljs-keyword">continue</span>;
+    } <span class="hljs-keyword">else</span> {
+        global[key] = <span class="hljs-built_in">window</span>[key]
+    }
+}
+</code></pre>
+</div>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- a bit misleading
+- will probably be renamed soon
+- use this only when needed
+- combine with the next thing
+" 
+>
+    <p><code>renderIntoDocument(componentInstance)</code></p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">import</span> {Simulate} <span class="hljs-keyword">from</span> <span class="hljs-string">'react-addons-test-utils'</span>;
+<span class="hljs-keyword">let</span> node = renderIntoDocument(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">MyComponent</span> /&gt;</span>)</span>;
+</code></pre>
+<div class="fragment">
+<pre><code class="lang-javascript"><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">renderIntoDocument</span>(<span class="hljs-params">instance</span>) </span>{
+    <span class="hljs-keyword">var</span> div = <span class="hljs-built_in">document</span>.createElement(<span class="hljs-string">'div'</span>);
+    <span class="hljs-keyword">return</span> ReactDOM.render(instance, div);
+}
+</code></pre>
+<p>Nothing is actually rendered into the document.</p>
+<p>This is great for test isolation!
+</div></p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <p><code>findRenderedDOMComponentWithTag(node, tagName)</code></p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">import</span> {findRenderedDOMComponentWithTag} <span class="hljs-keyword">from</span> <span class="hljs-string">'react-addons-test-utils'</span>;
+findRenderedDOMComponentWithTag(node, <span class="hljs-string">'button'</span>);
+<span class="hljs-comment">// returns DOM node or throws error</span>
+</code></pre>
+<p><code>findRenderedDOMComponentWithTag(node, tagName)</code></p>
+<pre><code class="lang-javascript"><span class="hljs-keyword">import</span> {findRenderedComponentWithType} <span class="hljs-keyword">from</span> <span class="hljs-string">'react-addons-test-utils'</span>;
+findRenderedComponentWithType(node, MySubComponent);
+<span class="hljs-comment">// returns instance node or throws error</span>
+<span class="hljs-comment">// only works with fully 'rendered' nodes (not shallowly rendered)</span>
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="simulate">Simulate</h3>
+<pre><code class="lang-javascript"><span class="hljs-keyword">import</span> {Simulate} <span class="hljs-keyword">from</span> <span class="hljs-string">'react-addons-test-utils'</span>;
+Simulate.click(clickableNode);
+<span class="hljs-comment">// clickableNode is 'real' DOM node that has a onClick event, </span>
+<span class="hljs-comment">// i. e. &lt;button&gt;</span>
+</code></pre>
+<div class="fragment">
+<pre><code class="lang-javascript">Simulate.change(inputNode);
+Simulate.keyDown(inputNode, {key: <span class="hljs-string">'Enter'</span>, keyCode: <span class="hljs-number">13</span>});
+<span class="hljs-comment">// Simulate.{eventName}(node, eventData);</span>
+<span class="hljs-comment">// for every event that React supports</span>
+</code></pre>
+</div>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <pre><code class="lang-javascript">clickHandler() {
+    <span class="hljs-keyword">this</span>.setState({hide: <span class="hljs-literal">true</span>});
+}
+
+render() {
+    <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.state.hide) {
+        <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>)</span>;
+    } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">return</span> (
+            <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+                <span class="hljs-tag">&lt;<span class="hljs-title">MySubComponent</span> 
+                    <span class="hljs-attribute">name</span>=<span class="hljs-value">"testing"</span> 
+                    <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.clickHandler.bind(this)}</span> /&gt;</span>
+            <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+        )</span>;
+    }
+}
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+     data-transition="slide-in none" 
+    
+>
+    <pre><code class="lang-javascript">test(<span class="hljs-string">'simulate click'</span>, () =&gt; {
+    <span class="hljs-keyword">let</span> node = renderIntoDocument(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">MyComponent</span> /&gt;</span>)</span>;
+    Simulate.click(findRenderedDOMComponentWithTag(node, <span class="hljs-string">'button'</span>));
+    expect(findRenderedDOMComponentWithTag(node, <span class="hljs-string">'div'</span>)).to.be.defined;
+    expect(
+        findRenderedDOMComponentWithTag
+            .bind(<span class="hljs-literal">undefined</span>, node, <span class="hljs-string">'button'</span>)
+    ).to.throw(<span class="hljs-built_in">Error</span>);
+});
+</code></pre>
+<small class="text--small"><a href="https://github.com/RobinThrift/react-immersion-ws-example-code/tree/SIMULATE_JSDOM_INTRO">Source</a></small>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+     data-transition="none slide-out" 
+    
+>
+    <pre><code class="lang-javascript">test('simulate click', () =&gt; {
+    let node = renderIntoDocument(&lt;MyComponent /&gt;);
+    Simulate.click(<span class="text--emphasize">findRenderedDOMComponentWithTag</span>(node, 'button'));
+    expect(<span class="text--emphasize">findRenderedDOMComponentWithTag</span>(node, 'div')).to.be.defined;
+    expect(
+        findRenderedDOMComponentWithTag
+            .bind(undefined, node, 'button')
+    ).to.throw(Error);
+});
+</code></pre>
+<small class="text--small"><a href="https://github.com/RobinThrift/react-immersion-ws-example-code/tree/SIMULATE_JSDOM_INTRO">Source</a></small>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- this is really, really hard
+" 
+>
+    <h3 id="testing-react-native-">Testing React (Native)</h3>
+
+</section> 
+
+                <section
+    class="slide "
+    
+     data-background-video="http://media.giphy.com/media/Qz8sdl0fslT5S/giphy.mp4" 
+     data-background-video-loop 
+    
+    
+    
+    
+    
+>
+    
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="things-to-note">Things to note</h3>
+<ul>
+<li>do your unit tests in pure JS<ul>
+<li>keep the interaction between iOS and JS small as possible</li>
+</ul>
+</li>
+<li>keep integration tests to a minimum</li>
+<li>UI tests are finicky</li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="how-do-i-make-my-components-testable-">How do I make my components testable?</h3>
+<div class="fragment">
+<ul>
+<li>use <code>accessibilityLabel</code>-prop liberally</li>
+<li>use <code>accessible={true}</code>-prop where appropriate
+</div></li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <p>What does <code>accessible={true}</code> mean?</p>
+<p><img class="fragment image-fragment" style="height: 500px" src="img/accessiblity-1.svg" />
+<img class="fragment image-fragment" style="height: 500px" src="img/accessiblity-2.svg" />
+<img class="fragment image-fragment" style="height: 500px" src="img/accessiblity-3.svg" />
+<img class="fragment image-fragment" style="height: 500px" src="img/accessiblity-4.svg" />
+<img class="fragment image-fragment" style="height: 500px" src="img/accessiblity-5.svg" /></p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="ui-testing-using-xcode-">UI Testing (using XCode)</h3>
+<video data-autoplay ><source data-src="img/ui-testing-example-video.mp4" type="video/mp4" /></video>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+     data-notes="- this projects code
+- consumer app code
+" 
+>
+    <h2 id="demo">DEMO</h2>
+<pre><code class="lang-javascript">&lt;View&gt;
+    <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Slider</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> <span class="hljs-attribute">resizeMode</span>=<span class="hljs-value">'contain'</span> <span class="hljs-attribute">source</span>=<span class="hljs-value">{{uri:</span> <span class="hljs-attribute">images</span>[<span class="hljs-attribute">0</span>]}} /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> <span class="hljs-attribute">resizeMode</span>=<span class="hljs-value">'contain'</span> <span class="hljs-attribute">source</span>=<span class="hljs-value">{{uri:</span> <span class="hljs-attribute">images</span>[<span class="hljs-attribute">1</span>]}} /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Image</span> <span class="hljs-attribute">resizeMode</span>=<span class="hljs-value">'contain'</span> <span class="hljs-attribute">source</span>=<span class="hljs-value">{{uri:</span> <span class="hljs-attribute">images</span>[<span class="hljs-attribute">2</span>]}} /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">Slider</span>&gt;</span>
+<span class="hljs-tag">&lt;/<span class="hljs-title">View</span>&gt;</span></span>
+</code></pre>
+<pre><code class="lang-javascript">&lt;ScrollView
+    accessibilityLabel=<span class="hljs-string">"slider"</span>
+    horizontal={<span class="hljs-literal">true</span>}
+    ...&gt;
+    {elements}
+&lt;<span class="hljs-regexp">/ScrollView&gt;</span>
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <pre><code class="lang-swift"><span class="hljs-keyword">let</span> slider = <span class="hljs-type">XCUIApplication</span>().otherElements[<span class="hljs-string">"slider"</span>]
+slider.swipeLeft()
+slider.swipeRight()
+slider.swipeLeft()
+slider.swipeLeft()
+<span class="hljs-type">XCTAssert</span>(slider.images[<span class="hljs-string">"image 3"</span>].frame == slider.frame)
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="conclusions">Conclusions</h3>
+<ul>
+<li>Swift only</li>
+<li>A lot of trial and error</li>
+<li>Hand down accessibility props!</li>
+<li>Appium will hopefully allow this to be done in JS</li>
+</ul>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <h3 id="integration-tests-js-with-ios-apis-">Integration Tests (JS with iOS APIs)</h3>
+<p>Requires 2 parts:
+<div class="fragment"></p>
+<ol>
+<li>JS Test Case as React Component</li>
+<li>Swift/Obj-C test file</li>
+</ol>
+<p><small class="text--small">All Exceptions should be thrown in JS</small>
+</div></p>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <pre><code class="lang-javascript"><span class="hljs-keyword">import</span> {expect} <span class="hljs-keyword">from</span> <span class="hljs-string">'chai'</span>;
+<span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react-native'</span>;
+<span class="hljs-keyword">let</span> {AppRegistry, View, Component} = React;
+<span class="hljs-keyword">import</span> {TestModule} <span class="hljs-keyword">from</span> <span class="hljs-string">'NativeModules'</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TestComp</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+    render() {
+        TestModule.markTestCompleted();
+        <span class="hljs-keyword">return</span> (<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">View</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">View</span>&gt;</span>)</span>;
+    }
+}
+
+AppRegistry
+    .registerComponent(<span class="hljs-string">'ExampleTests'</span>, () =&gt; { <span class="hljs-keyword">return</span> TestComp });
+</code></pre>
+
+</section> 
+
+                <section
+    class="slide "
+    
+    
+    
+    
+    
+    
+    
+    
+>
+    <pre><code class="lang-objectivec"><span class="hljs-class"><span class="hljs-keyword">@implementation</span> <span class="hljs-title">ExampleTests</span></span>
+{
+  RCTTestRunner *_runner;
+}
+
+- (<span class="hljs-keyword">void</span>)setUp
+{
+  [<span class="hljs-keyword">super</span> setUp];
+  _runner = RCTInitRunnerForApp(<span class="hljs-string">@"intTestDist/tests.int"</span>, <span class="hljs-literal">nil</span>);
+}
+
+- <span class="hljs-keyword">void</span>()testExampleTests
+{
+    [_runner runTest:_cmd module:<span class="hljs-string">@"ExampleTests"</span>]
+}
+<span class="hljs-keyword">@end</span>
+</code></pre>
+
+</section> 
+
+            </div>
+        </div>
+    
+        <script src="scripts/head.min.js"></script>
+        <script src="scripts/reveal.js"></script>
+        <script>
+        Reveal.initialize({"controls":false,"progress":false,"slideNumber":false,"history":true,"keyboard":true,"overview":true,"transition":"linear","backgroundTransition":"slide","showNotes":true,"dependencies":[{"src":"scripts/plugins/notes.js","async":true}]});
+        </script>
+    </body>
+</html>

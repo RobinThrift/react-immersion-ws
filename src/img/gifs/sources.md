@@ -1,4 +1,0 @@
-- testing-1: http://giphy.com/gifs/PFwKHjOcIoVUc
-- waiting-1: http://giphy.com/gifs/family-guy-animation-stewie-OdpRP5C9e82qI
-- star-trek-dan-dan-daaaa: http://gph.is/1KhANti
-- john-snow: http://giphy.com/gifs/very-core-Qz8sdl0fslT5S
